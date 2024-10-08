@@ -5,6 +5,7 @@ import com.example.weather.Data.HourlyWeatherData
 import com.example.weather.Data.WeatherData
 import android.util.Log
 import android.widget.ImageView
+import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,11 +40,11 @@ class MyViewModel(private val repository: Repo) : ViewModel() {
 
     private val _weatherData = MutableLiveData<WeatherData>()
     val weatherData: MutableLiveData<WeatherData> get() = _weatherData
-    fun getWeather(city: String = "서울특별시") {
+    fun getWeather(city: String = "서울특별시", unit: String = "metric") {
         viewModelScope.launch {
             runCatching {
                 Log.d("getWeather", "getWeather start")
-                fetchWeatherData(city)
+                fetchWeatherData(city,unit)
             }.onSuccess { weatherResponse ->
                 _weatherData.value = weatherResponse
                 _hourlyWeatherData = _weatherData.value?.hourlyData as ArrayList<HourlyWeatherData>
@@ -63,7 +64,7 @@ class MyViewModel(private val repository: Repo) : ViewModel() {
 
 
 
-    private fun handleException(e: Throwable) {
+     fun handleException(e: Throwable) {
         Log.d("getWeather", "$e.message")
         when (e) {
             is HttpException -> {
@@ -78,9 +79,9 @@ class MyViewModel(private val repository: Repo) : ViewModel() {
 
 
 
-    suspend fun fetchWeatherData(city: String = "Seoul"): WeatherData {
+    suspend fun fetchWeatherData(city: String = "Seoul", unit: String = "metric"): WeatherData {
         val apiKey = "0989eefe6e95e694b87676f7ea82a370"
-        val weatherResponse = repository.getWeather(city, apiKey)
+        val weatherResponse = repository.getWeather(city, apiKey,unit)
 
         val currentTemperature = weatherResponse.list[0].main.temp
         val currentHumidity = weatherResponse.list[0].main.humidity
@@ -99,6 +100,10 @@ class MyViewModel(private val repository: Repo) : ViewModel() {
             currentHumidity = currentHumidity,
             hourlyData = hourlyData
         )
+    }
+
+    fun setPref(key: Preferences.Key<String>, value: String) { viewModelScope.launch { // viewmodel 라이프사이클에 맞춘 coroutine scope
+        repository.setPref(key, value) }
     }
 
 }

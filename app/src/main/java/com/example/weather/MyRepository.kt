@@ -33,7 +33,8 @@ class Repo(private val context: Context) {
         }
     }
 
-    suspend fun getWeather(city: String, apiKey: String): WeatherResponse {
+
+    suspend fun getWeather(city: String, apiKey: String, unit: String): WeatherResponse {
         val baseURL = "https://api.openweathermap.org/"
         val api: RestApi = with(Retrofit.Builder()) {
             baseUrl(baseURL)
@@ -42,7 +43,7 @@ class Repo(private val context: Context) {
         }.create(RestApi::class.java)
 
         return withContext(Dispatchers.IO) {
-            val weatherResponse = api.getWeather()
+            val weatherResponse = api.getWeather(unit)
             Log.d("getWeather", "repository: ${weatherResponse}")
             weatherResponse
         }
