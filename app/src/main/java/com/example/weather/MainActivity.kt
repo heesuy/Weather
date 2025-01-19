@@ -25,7 +25,7 @@ import com.example.weather.MyAdapter
 
 
 //import com.example.weather.Model.WeatherModel
-import com.example.weather.Repo
+//import com.example.weather.Repo
 
 
 import com.google.android.material.snackbar.Snackbar
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val currentDate by lazy { SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(Date()) }
-    val myViewModel = MyViewModel(Repo(this))
+    val myViewModel = MyViewModel(/*Repo(this)*/)
     var setting = "metric"
      lateinit var switch1: Switch
 
@@ -101,30 +101,30 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        myViewModel.viewModelScope.launch {
-            runCatching {
-        myViewModel.myPref.collect{
-            it[MyPrefKey.setting]
-        }}.onSuccess {
-                flag->
-
-                if(flag.toString().equals("metric")){
-                switch1.isChecked = false
-                setting = "metric"
-                }
-                else{
-                    switch1.isChecked = true
-                    setting = "imperial"
-                }
-                myViewModel.getWeather(unit = setting)
-
-            }.onFailure {
-                myViewModel.handleException(it)
-            }
-
-        Log.d("observer","after observer")
-
-    }
+//        myViewModel.viewModelScope.launch {
+//            runCatching {
+//        myViewModel.myPref.collect{
+//            it[MyPrefKey.setting]
+//        }}.onSuccess {
+//                flag->
+//
+//                if(flag.toString().equals("metric")){
+//                switch1.isChecked = false
+//                setting = "metric"
+//                }
+//                else{
+//                    switch1.isChecked = true
+//                    setting = "imperial"
+//                }
+//                myViewModel.getWeather(unit = setting)
+//
+//            }.onFailure {
+//                myViewModel.handleException(it)
+//            }
+//
+//        Log.d("observer","after observer")
+//
+//    }
 
 
 
@@ -140,11 +140,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "섭씨로 변환", Toast.LENGTH_SHORT).show()
             }
 
-            myViewModel.viewModelScope.launch {
-                myViewModel.setPref(MyPrefKey.setting, setting).runCatching { }
-                    .onSuccess { myViewModel.getWeather(unit = setting) }
-                    .onFailure { myViewModel.handleException(it) }
-            }
+//            myViewModel.viewModelScope.launch {
+//                myViewModel.setPref(MyPrefKey.setting, setting).runCatching { }
+//                    .onSuccess { myViewModel.getWeather(unit = setting) }
+//                    .onFailure { myViewModel.handleException(it) }
+//            }
         }
 
 

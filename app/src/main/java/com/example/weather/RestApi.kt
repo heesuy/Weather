@@ -23,8 +23,8 @@ interface RestApi {
     @GET("img/wn/{weatherIcon}@2x.png")
     suspend fun getIcon(@Path("weatherIcon") weatherIcon: String): ResponseBody
 
-    @GET("users/{username}/repos")
-    fun listReposCall(@Path("username") user: String): Call<ArrayList<Repo>> // 콜백 사용할거면 코루틴 스코프 필요 없어!
-    @GET("wp-content/uploads/2019/03/google_logo_download_thumbnail.png")
-    suspend fun getImage(): ResponseBody
+//    @GET("users/{username}/repos")
+//    fun listReposCall(@Path("username") user: String): Call<ArrayList<Repo>> // 콜백 사용할거면 코루틴 스코프 필요 없어!
+//    @GET("wp-content/uploads/2019/03/google_logo_download_thumbnail.png")
+//    suspend fun getImage(): ResponseBody
 }
