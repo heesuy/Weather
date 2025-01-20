@@ -62,6 +62,8 @@ class MyViewModel(/*private val repository: Repo*/) : ViewModel() {
 //    }
 
     fun getWeather(city: String = "서울특별시", unit: String = "metric") {
+
+
         viewModelScope.launch {
             runCatching {
                 Log.d("getWeather", "getWeather start")

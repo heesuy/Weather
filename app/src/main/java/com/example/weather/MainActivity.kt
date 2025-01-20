@@ -52,15 +52,12 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    override fun onStart() {
-        super.onStart()
 
-    }
 
     private val currentDate by lazy { SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(Date()) }
     val myViewModel = MyViewModel(/*Repo(this)*/)
     var setting = "metric"
-     lateinit var switch1: Switch
+    lateinit var switch1: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,35 +93,11 @@ class MainActivity : AppCompatActivity() {
             val hourly =myViewModel.hourlyWeatherData.get(it)
             Log.d("getWeather", "getWeather  observer itemClickEvent ${it}")
 
-            this.downloadImage(hourly.icon)
 
         }
 
 
-//        myViewModel.viewModelScope.launch {
-//            runCatching {
-//        myViewModel.myPref.collect{
-//            it[MyPrefKey.setting]
-//        }}.onSuccess {
-//                flag->
-//
-//                if(flag.toString().equals("metric")){
-//                switch1.isChecked = false
-//                setting = "metric"
-//                }
-//                else{
-//                    switch1.isChecked = true
-//                    setting = "imperial"
-//                }
-//                myViewModel.getWeather(unit = setting)
-//
-//            }.onFailure {
-//                myViewModel.handleException(it)
-//            }
-//
-//        Log.d("observer","after observer")
-//
-//    }
+
 
 
 
@@ -140,94 +113,24 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "섭씨로 변환", Toast.LENGTH_SHORT).show()
             }
 
-//            myViewModel.viewModelScope.launch {
-//                myViewModel.setPref(MyPrefKey.setting, setting).runCatching { }
-//                    .onSuccess { myViewModel.getWeather(unit = setting) }
-//                    .onFailure { myViewModel.handleException(it) }
-//            }
         }
+        myViewModel.getWeather()
 
 
 
-            fun formatTimeString(): String? {
-                val currentDate =
-                    java.text.SimpleDateFormat("yyyy.MM.dd", java.util.Locale.getDefault())
-                        .format(java.util.Date())
-                return currentDate
-            }
+
 
 
 
     }
 
-    private fun downloadImage(icon: String) {
-
-        val imageView = findViewById<ImageView>(R.id.imageView3)
-        val url = "https://openweathermap.org/img/wn/${icon}@2x.png"
-        // 메인쓰레드 안건들게 DIspatchers.IO
-        CoroutineScope(Dispatchers.IO).launch {
-            val conn = URL(url).openConnection() as HttpURLConnection
-
-            val isStream = conn.inputStream // 연결시작 입력 스트림 생성!
-            val rImg = BitmapFactory.decodeStream(isStream) //데이터가 도착하면 입력스트림에서 받아옴
-            withContext(Dispatchers.Main) {
-                Log.d("getWeather", "getWeather  imageURL WeatherList ${rImg}")
-
-                imageView.setImageBitmap(rImg)
-            }
-            conn.disconnect()
-
-        }
-
+    fun formatTimeString(): String? {
+        val currentDate =
+            java.text.SimpleDateFormat("yyyy.MM.dd", java.util.Locale.getDefault())
+                .format(java.util.Date())
+        return currentDate
     }
+
+
 
 }
-
-
-
-//        val connectivityManager =
-//            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        val nw = connectivityManager.activeNetwork // 현재 활성화된 네트워크
-//        val actNw = connectivityManager.getNetworkCapabilities(nw)
-//
-//        val isConnected = actNw!!.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-//
-//        if (isConnected) {
-//            Snackbar.make(findViewById(R.id.main), "인터넷 연결", Snackbar.LENGTH_SHORT)
-//        }
-
-//        findViewById<Button>(R.id.buttonQuery).setOnClickListener {
-//            //downloadImage()
-//            refreshRetrofit(findViewById<EditText>(R.id.editUsername).text.toString())
-//
-//        }
-
-
-//        myViewModel.weatherList.observe(this) {
-//            println(it.size)
-//            Log.d("observer","${it.size}")
-//            Log.d("getWeather", "getWeather  observer WeatherList ${it}")
-//
-//            when(myViewModel.itemsEvent){
-//                ItemEvent.ADD->adapter.notifyItemInserted(myViewModel.itemEventPos)
-//                ItemEvent.DELETE->adapter.notifyItemRemoved(myViewModel.itemEventPos)
-//                ItemEvent.UPDATE-> println("nothing update")
-//                ItemEvent.CLEAR->adapter.notifyDataSetChanged()
-//            }
-//
-//
-//        }
-//        myViewModel.weatherData.observe(this) {
-//            findViewById<TextView>(R.id.textView3).text = it.temp
-//            println(it)
-//            Log.d("observer","${it}")
-//            //adapter.notifyDataSetChanged()
-//            println("getItemCOunt ${it}")
-//            Log.d("getWeather", "getWeather  observer WeatherList ${it}")
-//
-//            when(myViewModel.itemsEvent){
-//                ItemEvent.ADD->adapter.notifyItemInserted(myViewModel.itemEventPos)
-//                ItemEvent.DELETE->adapter.notifyItemRemoved(myViewModel.itemEventPos)
-//                ItemEvent.UPDATE-> println("nothing update")
-//                ItemEvent.CLEAR->adapter.notifyDataSetChanged()
-//            }}
