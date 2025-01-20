@@ -12,9 +12,7 @@ class MyAdapter(val viewModel: MyViewModel) : RecyclerView.Adapter<MyAdapter.MyV
 
     inner class MyViewHolder(val view : View) : RecyclerView.ViewHolder(view){
             fun setContents(position: Int){
-              // val data = viewModel.getData()
-               // val data1 = viewModel.weatherList
-                //val data2 = viewModel.weatherData
+
                 val data1 = viewModel.hourlyData.value
 
                 if( data1 != null){
@@ -60,10 +58,8 @@ class MyAdapter(val viewModel: MyViewModel) : RecyclerView.Adapter<MyAdapter.MyV
 
     override fun getItemCount(): Int {
 
-        //Log.d("getWeather", "getWeather  item count ${viewModel.weatherList.value?.size}")
         Log.d("getWeather", "getWeather  Adapter item count ${viewModel.hourlyData.value?.size}")
 
-        //println("getItemCOunt ${viewModel..value?.size?:0}")
 
        return viewModel.hourlyData.value?.size?:0
     }
